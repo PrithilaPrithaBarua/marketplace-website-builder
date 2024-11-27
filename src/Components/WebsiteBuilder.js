@@ -3,16 +3,31 @@ import grapesjs from "grapesjs";
 import "../styles/main.scss";
 import gjsPresetWebPage from "grapesjs-preset-webpage";
 import gjsBlocksBasic from "grapesjs-blocks-basic";
+import gjsComponentsCountdown from "grapesjs-component-countdown";
+import gjsTabs from 'grapesjs-component-countdown';
+import gjsCustomCode from 'grapesjs-custom-code';
+import gjsTooltip from 'grapesjs-tooltip';
+import {useParams} from 'react-router-dom';
 
-function Page1() {
+
+
+function WebsiteBuilder() {
   const [editor, setEditor] =useState(null);
+  const {pageId} = useParams();
+  console.log('pageId :>>', pageId);
+
+
+
   useEffect(()=>{
     const editor =grapesjs.init({
       container: "#editor", 
-      plugins:[gjsPresetWebPage, gjsBlocksBasic],
+      plugins:[gjsPresetWebPage, gjsBlocksBasic, gjsComponentsCountdown, gjsTabs, gjsCustomCode, gjsTooltip],
       pluginsOpts: {
         gjsPresetWebPage: {},
-        [gjsBlocksBasic]: {},
+        gjsBlocksBasic: {},
+        gjsComponentsCountdown: {},
+        gjsTabs: {},
+        gjsTooltip:{},
       },
     });
 
@@ -32,6 +47,17 @@ function Page1() {
       attributes: { class: 'gjs-block-section' },
     });
 
+    editor.BlockManager.add('custom-button', {
+      label: 'Button', // Label for the block in the block manager
+      content: `
+        <button style="padding: 10px 20px; font-size: 16px; background-color: #007bff; color: #fff; border: none; border-radius: 4px; cursor: pointer;">
+          Click Me
+        </button>
+      `,
+      category: 'Basic', // Group it under the "Basic" category
+      attributes: { class: 'fa fa-square' }, // Icon for the block
+    });
+
     setEditor(editor);
   },[]);
 
@@ -42,4 +68,4 @@ function Page1() {
   );
 }
 
-export default Page1;
+export default WebsiteBuilder;
